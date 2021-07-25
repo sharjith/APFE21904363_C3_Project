@@ -101,4 +101,24 @@ class RestaurantTest {
     }
     //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>TOTAL PRICE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    @Test
+    public void selecting_items_from_menu_should_return_the_total_price() {
+        List<String> selectedItems = new ArrayList<String>();
+        selectedItems.add("Sweet corn soup");
+        selectedItems.add("Vegetable lasagne");
+
+        int expectedTotal = 119 + 269;
+        int totalPrice = restaurant.getOrderValue(selectedItems);
+        assertEquals(expectedTotal, totalPrice);
+    }
+
+    @Test
+    public void selecting_no_items_from_menu_should_return_zero_total_price(){
+        List<String> selectedItems = new ArrayList<String>();
+        int totalPrice = restaurant.getOrderValue(selectedItems);
+        assertEquals(0, totalPrice);
+    }
+    //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 }
