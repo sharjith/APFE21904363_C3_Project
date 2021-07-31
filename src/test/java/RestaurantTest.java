@@ -38,13 +38,16 @@ class RestaurantTest {
         //DONE WRITE UNIT TEST CASE HERE
 
         // Between working hours
-        LocalTime checkingTime = LocalTime.of(11, 30, 0);
-        mockOpeningHours(spiedRestaurant, checkingTime);
-        assertTrue(spiedRestaurant.isRestaurantOpen());
-
+        LocalTime betweenWorkingHours = LocalTime.of(11, 30, 0);
         // Edge case - exact opening time
-        checkingTime = LocalTime.of(10, 30, 0);
-        mockOpeningHours(spiedRestaurant, checkingTime);
+        LocalTime exactOpeningTime = LocalTime.of(10, 30, 0);
+
+        // Mock the current time
+        Mockito.when(spiedRestaurant.getCurrentTime()).thenReturn(betweenWorkingHours, exactOpeningTime);
+
+        // Between working hours
+        assertTrue(spiedRestaurant.isRestaurantOpen());
+        // Edge case - exact opening time
         assertTrue(spiedRestaurant.isRestaurantOpen());
     }
 
@@ -53,28 +56,22 @@ class RestaurantTest {
         //DONE WRITE UNIT TEST CASE HERE
 
         // Before opening hours
-        LocalTime checkingTime = LocalTime.of(9, 30, 0);
-        mockOpeningHours(spiedRestaurant, checkingTime);
-        assertFalse(spiedRestaurant.isRestaurantOpen());
-
+        LocalTime beforeOpeningHours = LocalTime.of(9, 30, 0);
         // After closing hours
-        checkingTime = LocalTime.of(23, 0, 0);
-        mockOpeningHours(spiedRestaurant, checkingTime);
-        assertFalse(spiedRestaurant.isRestaurantOpen());
-
+        LocalTime afterClosingHours = LocalTime.of(23, 0, 0);
         // Edge case - exact closing time
-        checkingTime = LocalTime.of(22, 0, 0);
-        mockOpeningHours(spiedRestaurant, checkingTime);
+        LocalTime exactClosingTime = LocalTime.of(22, 0, 0);
+
+        // Mock the current time
+        Mockito.when(spiedRestaurant.getCurrentTime()).thenReturn(beforeOpeningHours, afterClosingHours, exactClosingTime);
+
+        // Before opening hours
+        assertFalse(spiedRestaurant.isRestaurantOpen());
+        // After closing hours
+        assertFalse(spiedRestaurant.isRestaurantOpen());
+        // Edge case - exact closing time
         assertFalse(spiedRestaurant.isRestaurantOpen());
     }
-
-    private void mockOpeningHours(Restaurant spiedRestaurant, LocalTime checkingTime) {
-        Mockito.when(spiedRestaurant.isRestaurantOpen()).thenReturn(
-                checkingTime.compareTo(openingTime) == 0 ||
-                ((checkingTime.isAfter(openingTime) && checkingTime.isBefore(closingTime)))
-        );
-    }
-
     //<<<<<<<<<<<<<<<<<<<<<<<<<OPEN/CLOSED>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
